@@ -1,17 +1,48 @@
-import styled from "styled-components"
+import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function SeatsPage() {
+
+    const { idSessao } = useParams();
+    const [seats, setSeats] = useState(undefined)
+
+    useEffect(() => {
+        const urlSeats = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
+        const promise = axios.get(urlSeats);
+
+        promise.then((response) => {
+            console.log(response.data);
+            setSeats(response.data)
+        });
+        promise.catch((error) => console.log(error.data))
+    }, []);
+
+    if (seats === undefined) {
+        return (
+            <>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+            </>);
+    }
 
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
+                {seats.seats.map((seat) => <Seat key={seat.id} seat={seat} />)}
             </SeatsContainer>
 
             <CaptionContainer>
@@ -41,15 +72,21 @@ export default function SeatsPage() {
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={seats.movie.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{seats.movie.title}</p>
+                    <p>{seats.day.weekday} - {seats.name}</p>
                 </div>
             </FooterContainer>
 
         </PageContainer>
+    );
+}
+
+function Seat({ seat }) {
+    return (
+        <SeatItem>{seat.name}</SeatItem>
     )
 }
 
@@ -73,7 +110,7 @@ const SeatsContainer = styled.div`
     align-items: center;
     justify-content: center;
     margin-top: 20px;
-`
+`;
 const FormContainer = styled.div`
     width: calc(100vw - 40px); 
     display: flex;
@@ -87,14 +124,14 @@ const FormContainer = styled.div`
     input {
         width: calc(100vw - 60px);
     }
-`
+`;
 const CaptionContainer = styled.div`
     display: flex;
     flex-direction: row;
     width: 300px;
     justify-content: space-between;
     margin: 20px;
-`
+`;
 const CaptionCircle = styled.div`
     border: 1px solid blue;         // Essa cor deve mudar
     background-color: lightblue;    // Essa cor deve mudar
@@ -105,13 +142,13 @@ const CaptionCircle = styled.div`
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
-`
+`;
 const CaptionItem = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 12px;
-`
+`;
 const SeatItem = styled.div`
     border: 1px solid blue;         // Essa cor deve mudar
     background-color: lightblue;    // Essa cor deve mudar
@@ -124,7 +161,7 @@ const SeatItem = styled.div`
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
-`
+`;
 const FooterContainer = styled.div`
     width: 100%;
     height: 120px;
@@ -162,4 +199,4 @@ const FooterContainer = styled.div`
             }
         }
     }
-`
+`;

@@ -1,67 +1,83 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components"
+import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import styled from "styled-components";
+
 
 
 export default function SessionsPage() {
 
     const { idFilme } = useParams();
+    const [sessions, setSessions] = useState(undefined);
 
-    console.log(idFilme);
 
     useEffect(() => {
-
-        const urlMovie = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`
-
+        const urlMovie = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`;
         const promise = axios.get(urlMovie);
 
-        promise.then((response) => console.log(response.data))
-        promise.catch((error) => console.log(error.response.data))
+        promise.then((response) => {
+            setSessions(response.data);
+        });
+        promise.catch((error) => console.log(error.response.data));
 
 
-    }, [])
+    }, []);
+
+    if (sessions === undefined) {
+        return (
+            <>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+            </>);
+    }
 
     return (
         <PageContainer>
             Selecione o horário
             <div>
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
+                {sessions.days.map((day) => (
+                    <Session key={day.id}
+                        session={day}
+                    />))}
             </div>
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={sessions.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
+                    <p>{sessions.title}</p>
                 </div>
             </FooterContainer>
 
         </PageContainer>
-    )
+    );
+}
+
+function Session({ session }) {
+    return (
+        <SessionContainer>
+            {session.weekday} - {session.date}
+            <ButtonsContainer>
+                <Link to={`/assentos/${session.showtimes[0].id}`}>
+                    <button>{session.showtimes[0].name}</button>
+                </Link>
+                <Link to={`/assentos/${session.showtimes[1].id}`} >
+                    <button>{session.showtimes[1].name}</button>
+                </Link>
+            </ButtonsContainer>
+        </SessionContainer>
+    );
 }
 
 const PageContainer = styled.div`
@@ -77,7 +93,7 @@ const PageContainer = styled.div`
     div {
         margin-top: 20px;
     }
-`
+`;
 const SessionContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -86,18 +102,19 @@ const SessionContainer = styled.div`
     font-size: 20px;
     color: #293845;
     padding: 0 20px;
-`
+`;
 const ButtonsContainer = styled.div`
     display: flex;
     flex-direction: row;
     margin: 20px 0;
     button {
         margin-right: 20px;
+        cursor: pointer;
     }
     a {
         text-decoration: none;
     }
-`
+`;
 const FooterContainer = styled.div`
     width: 100%;
     height: 120px;
@@ -135,4 +152,4 @@ const FooterContainer = styled.div`
             }
         }
     }
-`
+`;

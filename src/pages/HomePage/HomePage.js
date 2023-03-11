@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 
 export default function HomePage() {
 
-    const [movies, setMovies] = useState([]);
-    const urlMovies = "https://mock-api.driven.com.br/api/v8/cineflex/movies";
+    const [movies, setMovies] = useState(undefined);
 
     useEffect(() => {
+        const urlMovies = "https://mock-api.driven.com.br/api/v8/cineflex/movies";
         const promise = axios.get(urlMovies);
         promise.then(response => {
             (console.log(response.data));
@@ -17,6 +17,24 @@ export default function HomePage() {
 
         promise.catch(error => (console.log(error.response.data)));
     }, []);
+
+    if (movies === undefined) {
+        return (
+            <>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+                <div>Loading...</div>
+            </>);
+    }
 
 
     return (
