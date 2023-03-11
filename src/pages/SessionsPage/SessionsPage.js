@@ -1,6 +1,26 @@
+import axios from "axios";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components"
 
+
 export default function SessionsPage() {
+
+    const { idFilme } = useParams();
+
+    console.log(idFilme);
+
+    useEffect(() => {
+
+        const urlMovie = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`
+
+        const promise = axios.get(urlMovie);
+
+        promise.then((response) => console.log(response.data))
+        promise.catch((error) => console.log(error.response.data))
+
+
+    }, [])
 
     return (
         <PageContainer>
