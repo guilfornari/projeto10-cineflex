@@ -6,7 +6,7 @@ import axios from "axios";
 export default function SeatsPage() {
 
     const { idSessao } = useParams();
-    const [seats, setSeats] = useState(undefined)
+    const [seats, setSeats] = useState(undefined);
 
     useEffect(() => {
         const urlSeats = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
@@ -47,30 +47,30 @@ export default function SeatsPage() {
 
             <CaptionContainer>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle status={"selected"} />
                     Selecionado
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle status={"available"} />
                     Disponível
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle status={"unavailable"} />
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
 
             <FormContainer>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                <input data-test="client-name" placeholder="Digite seu nome..." />
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                <input data-test="client-cpf" placeholder="Digite seu CPF..." />
 
-                <button>Reservar Assento(s)</button>
+                <button data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={seats.movie.posterURL} alt="poster" />
                 </div>
@@ -85,8 +85,26 @@ export default function SeatsPage() {
 }
 
 function Seat({ seat }) {
+
+    const statusBd = ["#808F9D", "#F7C52B", "#0E7D71"];
+    const statusBg = ["#C3CFD9", "#FBE192", "#1AAE9E"];
+
+    const [seatStatus, setSeatStatus] = useState(seat.isAvailable);
+
+
+    function select(id) {
+        setSeatStatus("selected");
+    }
+
     return (
-        <SeatItem>{seat.name}</SeatItem>
+        <SeatItem
+            onClick={() => select(seat.id)}
+            seatStatus={seatStatus}
+            statusBd={statusBd}
+            statusBg={statusBg}
+            data-test="seat">
+            {seat.name}
+        </SeatItem>
     )
 }
 
@@ -133,8 +151,29 @@ const CaptionContainer = styled.div`
     margin: 20px;
 `;
 const CaptionCircle = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+
+    border: 1px solid ${props => {
+        switch (props.status) {
+            case "selected":
+                return "#0E7D71"
+            case "unavailable":
+                return "#F7C52B"
+            default:
+                return "#808F9D"
+        }
+    }
+    };
+    background-color: ${props => {
+        switch (props.status) {
+            case "selected":
+                return "#1AAE9E"
+            case "unavailable":
+                return "#FBE192"
+            default:
+                return "#C3CFD9"
+        }
+    }
+    };
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -150,8 +189,28 @@ const CaptionItem = styled.div`
     font-size: 12px;
 `;
 const SeatItem = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    border: 1px solid ${props => {
+        switch (props.seatStatus) {
+            case false:
+                return props.statusBd[1];
+            case "selected":
+                return props.statusBd[2];
+            default:
+                return props.statusBd[0];
+        }
+    }
+    };
+    background-color: ${props => {
+        switch (props.seatStatus) {
+            case false:
+                return props.statusBg[1];
+            case "selected":
+                return props.statusBg[2];
+            default:
+                return props.statusBg[0];
+        }
+    }
+    };
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -161,6 +220,7 @@ const SeatItem = styled.div`
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
+    cursor: pointer;
 `;
 const FooterContainer = styled.div`
     width: 100%;

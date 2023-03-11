@@ -51,7 +51,7 @@ export default function SessionsPage() {
                     />))}
             </div>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={sessions.posterURL} alt="poster" />
                 </div>
@@ -66,14 +66,14 @@ export default function SessionsPage() {
 
 function Session({ session }) {
     return (
-        <SessionContainer>
+        <SessionContainer data-test="movie-day">
             {session.weekday} - {session.date}
             <ButtonsContainer>
                 <Link to={`/assentos/${session.showtimes[0].id}`}>
-                    <button>{session.showtimes[0].name}</button>
+                    <button data-test="showtime">{session.showtimes[0].name}</button>
                 </Link>
                 <Link to={`/assentos/${session.showtimes[1].id}`} >
-                    <button>{session.showtimes[1].name}</button>
+                    <button data-test="showtime">{session.showtimes[1].name}</button>
                 </Link>
             </ButtonsContainer>
         </SessionContainer>

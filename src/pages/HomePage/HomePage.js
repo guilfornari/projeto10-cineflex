@@ -56,7 +56,7 @@ export default function HomePage() {
 function Movie({ poster, title, id }) {
     return (
         <Link to={`/sessoes/${id}`}>
-            <MovieContainer>
+            <MovieContainer data-test="movie">
                 <img src={poster} alt={title} />
             </MovieContainer>
         </Link>
