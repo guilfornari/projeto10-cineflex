@@ -17,9 +17,9 @@ export default function SeatsPage({ reserveSeat, reserveSeatId, reserveSeatName,
         const promise = axios.get(urlSeats);
 
         promise.then((response) => {
-            setSeats(response.data)
+            setSeats(response.data);
         });
-        promise.catch((error) => console.log(error.data))
+        promise.catch((error) => console.log(error.data));
     }, []);
 
     function submitForm(event) {
@@ -147,7 +147,6 @@ function Seat({ seat, reserveSeatId, reserveSeatName, setReserveSeatId, setReser
 
     function removeSeat(reserve, seatList, func) {
         const changeReserveSeat = seatList.filter(seat => seat !== reserve);
-        console.log(changeReserveSeat)
         func([...changeReserveSeat]);
     }
 
@@ -161,7 +160,7 @@ function Seat({ seat, reserveSeatId, reserveSeatName, setReserveSeatId, setReser
             data-test="seat">
             {seat.name}
         </SeatItem>
-    )
+    );
 }
 
 const PageContainer = styled.div`
@@ -175,7 +174,7 @@ const PageContainer = styled.div`
     margin-top: 30px;
     padding-bottom: 120px;
     padding-top: 70px;
-`
+`;
 const SeatsContainer = styled.div`
     width: 330px;
     display: flex;

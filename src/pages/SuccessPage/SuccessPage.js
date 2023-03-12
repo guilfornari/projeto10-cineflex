@@ -34,7 +34,7 @@ export default function SuccessPage({ reserveSeatName, reservation, reservedMovi
             <button data-test="go-home-btn" onClick={restartReservation}>Voltar para Home</button>
 
         </PageContainer>
-    )
+    );
 }
 
 const PageContainer = styled.div`
@@ -63,7 +63,7 @@ const PageContainer = styled.div`
         text-align: center;
         color: #247A6B;
     }
-`
+`;
 const TextContainer = styled.div`
     width: 100%;
     display: flex;
@@ -79,4 +79,4 @@ const TextContainer = styled.div`
         font-weight: 400;
         font-size: 22px;
     }
-`
+`;

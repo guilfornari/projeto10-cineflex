@@ -12,7 +12,7 @@ export default function App() {
     const [reserveSeatId, setReserveSeatId] = useState([]);
     const [reserveSeatName, setReserveSeatName] = useState([]);
     const [reservation, setReservation] = useState({ ids: "", name: "", cpf: "" });
-    const [reservedMovie, setReservedMovie] = useState({ title: "", date: "", time: "" })
+    const [reservedMovie, setReservedMovie] = useState({ title: "", date: "", time: "" });
 
     function reserveSeat(clientName, clientCPF, seats) {
 
@@ -32,7 +32,7 @@ export default function App() {
             ids: reserveSeatId,
             name: clientName,
             cpf: clientCPF
-        }
+        };
 
         const url = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
         const promise = axios.post(url, reservationToSend);

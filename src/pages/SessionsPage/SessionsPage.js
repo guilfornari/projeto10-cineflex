@@ -26,18 +26,7 @@ export default function SessionsPage() {
     if (sessions === undefined) {
         return (
             <>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
+                <PageContainer>Loading...</PageContainer>
             </>);
     }
 
