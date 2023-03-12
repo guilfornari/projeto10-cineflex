@@ -7,17 +7,22 @@ export default function SeatsPage() {
 
     const { idSessao } = useParams();
     const [seats, setSeats] = useState(undefined);
+    const [reserveSeatId, setReserveSeatId] = useState([]);
+    const [reserveSeatName, setReserveSeatName] = useState([]);
 
     useEffect(() => {
         const urlSeats = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
         const promise = axios.get(urlSeats);
 
         promise.then((response) => {
-            console.log(response.data);
             setSeats(response.data)
         });
         promise.catch((error) => console.log(error.data))
     }, []);
+
+    function reserveSeat() {
+
+    }
 
     if (seats === undefined) {
         return (
@@ -42,7 +47,13 @@ export default function SeatsPage() {
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                {seats.seats.map((seat) => <Seat key={seat.id} seat={seat} />)}
+                {seats.seats.map((seat) => <Seat
+                    key={seat.id}
+                    seat={seat}
+                    reserveSeatId={reserveSeatId}
+                    reserveSeatName={reserveSeatName}
+                    setReserveSeatId={setReserveSeatId}
+                    setReserveSeatName={setReserveSeatName} />)}
             </SeatsContainer>
 
             <CaptionContainer>
@@ -60,14 +71,23 @@ export default function SeatsPage() {
                 </CaptionItem>
             </CaptionContainer>
 
-            <FormContainer>
+            <FormContainer onSubmit={reserveSeat}>
                 Nome do Comprador:
-                <input data-test="client-name" placeholder="Digite seu nome..." />
+                <input
+                    data-test="client-name"
+                    required
+                    placeholder="Digite seu nome..." />
 
                 CPF do Comprador:
-                <input data-test="client-cpf" placeholder="Digite seu CPF..." />
+                <input
+                    data-test="client-cpf"
+                    type="number"
+                    required
+                    placeholder="Digite seu CPF..." />
 
-                <button data-test="book-seat-btn">Reservar Assento(s)</button>
+                <button
+                    data-test="book-seat-btn"
+                    type="submit" >Reservar Assento(s)</button>
             </FormContainer>
 
             <FooterContainer data-test="footer">
@@ -84,7 +104,7 @@ export default function SeatsPage() {
     );
 }
 
-function Seat({ seat }) {
+function Seat({ seat, reserveSeatId, reserveSeatName, setReserveSeatId, setReserveSeatName }) {
 
     const statusBd = ["#808F9D", "#F7C52B", "#0E7D71"];
     const statusBg = ["#C3CFD9", "#FBE192", "#1AAE9E"];
@@ -92,13 +112,37 @@ function Seat({ seat }) {
     const [seatStatus, setSeatStatus] = useState(seat.isAvailable);
 
 
-    function select(id) {
-        setSeatStatus("selected");
+    function select(id, name) {
+        if (seatStatus === false) {
+            return alert("Esse assento não está disponível");
+        }
+        if (seatStatus === "selected") {
+            setSeatStatus(true);
+            removeSeat(id, reserveSeatId, setReserveSeatId);
+            removeSeat(name, reserveSeatName, setReserveSeatName);
+        } else {
+            setSeatStatus("selected");
+            addSeat(id, reserveSeatId, setReserveSeatId);
+            addSeat(name, reserveSeatName, setReserveSeatName);
+        }
     }
+
+    function addSeat(reserve, seatList, func) {
+        seatList.push(reserve);
+        console.log(seatList);
+        func([...seatList]);
+    }
+
+    function removeSeat(reserve, seatList, func) {
+        const changeReserveSeat = seatList.filter(seat => seat !== reserve);
+        console.log(changeReserveSeat)
+        func([...changeReserveSeat]);
+    }
+
 
     return (
         <SeatItem
-            onClick={() => select(seat.id)}
+            onClick={() => select(seat.id, seat.name)}
             seatStatus={seatStatus}
             statusBd={statusBd}
             statusBg={statusBg}
@@ -129,7 +173,7 @@ const SeatsContainer = styled.div`
     justify-content: center;
     margin-top: 20px;
 `;
-const FormContainer = styled.div`
+const FormContainer = styled.form`
     width: calc(100vw - 40px); 
     display: flex;
     flex-direction: column;

@@ -11,7 +11,6 @@ export default function HomePage() {
         const urlMovies = "https://mock-api.driven.com.br/api/v8/cineflex/movies";
         const promise = axios.get(urlMovies);
         promise.then(response => {
-            (console.log(response.data));
             setMovies(response.data);
         });
 
