@@ -1,6 +1,14 @@
-import styled from "styled-components"
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-export default function SuccessPage() {
+export default function SuccessPage({ reserveSeatName, reservation, reservedMovie }) {
+
+    const navigate = useNavigate();
+
+    function restartReservation() {
+        navigate("/");
+        window.location.reload();
+    }
 
     return (
         <PageContainer>
@@ -8,24 +16,23 @@ export default function SuccessPage() {
 
             <TextContainer>
                 <strong><p>Filme e sessão</p></strong>
-                <p>Tudo em todo lugar ao mesmo tempo</p>
-                <p>03/03/2023 - 14:00</p>
+                <p>{reservedMovie.title}</p>
+                <p>{reservedMovie.date} - {reservedMovie.time}</p>
             </TextContainer>
 
             <TextContainer>
                 <strong><p>Ingressos</p></strong>
-                <p>Assento 01</p>
-                <p>Assento 02</p>
-                <p>Assento 03</p>
+                {reserveSeatName.map(seat => <p key={seat}>Assento {seat}</p>)}
             </TextContainer>
 
             <TextContainer>
                 <strong><p>Comprador</p></strong>
-                <p>Nome: Letícia Chijo</p>
-                <p>CPF: 123.456.789-10</p>
+                <p>Nome: {reservation.name}</p>
+                <p>CPF: {reservation.cpf}</p>
             </TextContainer>
 
-            <button>Voltar para Home</button>
+            <button onClick={restartReservation}>Voltar para Home</button>
+
         </PageContainer>
     )
 }
@@ -40,11 +47,10 @@ const PageContainer = styled.div`
     margin: 30px 20px;
     padding-bottom: 120px;
     padding-top: 70px;
-    a {
-        text-decoration: none;
-    }
+
     button {
         margin-top: 50px;
+        cursor: pointer;
     }
     h1 {
         font-family: 'Roboto';

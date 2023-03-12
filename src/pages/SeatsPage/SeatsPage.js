@@ -2,13 +2,15 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function SeatsPage() {
+export default function SeatsPage({ reserveSeat, reserveSeatId, reserveSeatName, setReserveSeatId, setReserveSeatName }) {
 
     const { idSessao } = useParams();
     const [seats, setSeats] = useState(undefined);
-    const [reserveSeatId, setReserveSeatId] = useState([]);
-    const [reserveSeatName, setReserveSeatName] = useState([]);
+    const [clientName, setClientName] = useState("");
+    const [clientCPF, setClientCPF] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         const urlSeats = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
@@ -20,8 +22,11 @@ export default function SeatsPage() {
         promise.catch((error) => console.log(error.data))
     }, []);
 
-    function reserveSeat() {
+    function submitForm(event) {
 
+        event.preventDefault();
+        reserveSeat(clientName, clientCPF, seats);
+        navigate("/sucesso");
     }
 
     if (seats === undefined) {
@@ -71,23 +76,30 @@ export default function SeatsPage() {
                 </CaptionItem>
             </CaptionContainer>
 
-            <FormContainer onSubmit={reserveSeat}>
+            <FormContainer onSubmit={submitForm}>
                 Nome do Comprador:
                 <input
                     data-test="client-name"
                     required
-                    placeholder="Digite seu nome..." />
+                    placeholder="Digite seu nome..."
+                    value={clientName}
+                    onChange={e => setClientName(e.target.value)} />
 
                 CPF do Comprador:
                 <input
                     data-test="client-cpf"
                     type="number"
                     required
-                    placeholder="Digite seu CPF..." />
+                    placeholder="Digite seu CPF..."
+                    value={clientCPF}
+                    onChange={e => setClientCPF(e.target.value)} />
 
                 <button
                     data-test="book-seat-btn"
-                    type="submit" >Reservar Assento(s)</button>
+                    type="submit" >
+                    Reservar Assento(s)
+                </button>
+
             </FormContainer>
 
             <FooterContainer data-test="footer">
@@ -182,9 +194,13 @@ const FormContainer = styled.form`
     font-size: 18px;
     button {
         align-self: center;
+        cursor: pointer;
     }
     input {
         width: calc(100vw - 60px);
+    }
+    a {
+        text-decoration: none;
     }
 `;
 const CaptionContainer = styled.div`
