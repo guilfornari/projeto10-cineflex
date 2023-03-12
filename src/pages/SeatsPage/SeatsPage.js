@@ -31,20 +31,8 @@ export default function SeatsPage({ reserveSeat, reserveSeatId, reserveSeatName,
 
     if (seats === undefined) {
         return (
-            <>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-                <div>Loading...</div>
-            </>);
+            <PageContainer>Loading...</PageContainer>
+        );
     }
 
     return (
