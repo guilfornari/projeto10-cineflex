@@ -14,24 +14,24 @@ export default function SuccessPage({ reserveSeatName, reservation, reservedMovi
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
-            <TextContainer>
-                <strong><p>Filme e sessão</p></strong>
+            <TextContainer data-test="movie-info">
+                <strong>Filme e sessão</strong>
                 <p>{reservedMovie.title}</p>
                 <p>{reservedMovie.date} - {reservedMovie.time}</p>
             </TextContainer>
 
-            <TextContainer>
-                <strong><p>Ingressos</p></strong>
+            <TextContainer data-test="seats-info">
+                <strong>Ingressos</strong>
                 {reserveSeatName.map(seat => <p key={seat}>Assento {seat}</p>)}
             </TextContainer>
 
-            <TextContainer>
-                <strong><p>Comprador</p></strong>
+            <TextContainer data-test="client-info">
+                <strong>Comprador</strong>
                 <p>Nome: {reservation.name}</p>
                 <p>CPF: {reservation.cpf}</p>
             </TextContainer>
 
-            <button onClick={restartReservation}>Voltar para Home</button>
+            <button data-test="go-home-btn" onClick={restartReservation}>Voltar para Home</button>
 
         </PageContainer>
     )
@@ -71,7 +71,12 @@ const TextContainer = styled.div`
     align-items: flex-start;
     margin-top: 30px;
     strong {
-        font-weight: bold;
+        font-weight: 700;
+        font-size: 24px;
         margin-bottom: 10px;
+    }
+    p {
+        font-weight: 400;
+        font-size: 22px;
     }
 `
